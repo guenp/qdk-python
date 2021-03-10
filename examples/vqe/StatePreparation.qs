@@ -88,4 +88,26 @@ namespace Microsoft.Quantum.Samples.Chemistry.SimpleVQE.StatePrep {
             TrotterStepImpl(terms, idx, trotterStepSize, qubits);
         }
     }
+
+    /// # Summary
+    /// Private wrapper around PrepareTrialState to make it compatible with EstimateFrequencyA by defining an adjoint.
+    /// EstimateFrequencyA has built-in emulation feature when targeting the QuantumSimulator, which speeds up its execution.
+    ///
+    /// # Input
+    /// ## inputState
+    /// The Jordan-Wigner input required for PrepareTrialState to run.
+    /// ## qubits
+    /// A qubit register.
+    operation _prepareTrialStateWrapper(inputState : (Int, JordanWignerInputState[]), qubits : Qubit[]) : Unit is Adj {
+
+        body (...) {
+            Microsoft.Quantum.Diagnostics.AssertAllZero(qubits);
+            PrepareTrialStateUCCSD(inputState, qubits);
+        }
+
+        // Define a non-matching adjoint body for compliance with EstimateFrequencyA
+        adjoint (...) {
+            ResetAll(qubits);
+        }
+    }
 }

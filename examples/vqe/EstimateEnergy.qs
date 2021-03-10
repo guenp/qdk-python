@@ -117,18 +117,18 @@ namespace Microsoft.Quantum.Samples.Chemistry.SimpleVQE.EstimateEnergy {
         for (idxMeasurement in 0 .. nSamples - 1) {
             using (register = Qubit[nQubits]) {
                 PrepareTrialState(inputState, register);
-                let result = ForEach(MResetZ, register);
-                //let result = JointMeasure(measOp, register);
-                //if (result == Zero) {
-                //    set nUp += 1;
-                //}
-                //for (q in register)
-                //{
-                //    let r = M(q);
-                //}
+                // let result = ForEach(MResetZ, register);
+                let result = JointMeasure(measOp, register);
+                if (result == Zero) {
+                   set nUp += 1;
+                }
+                for (q in register)
+                {
+                   let r = M(q);
+                }
             }
         }
-        //return IntAsDouble(nUp) / IntAsDouble(nSamples);
-        return 1.0;
+        return IntAsDouble(nUp) / IntAsDouble(nSamples);
+        // return 1.0;
     }
 }
